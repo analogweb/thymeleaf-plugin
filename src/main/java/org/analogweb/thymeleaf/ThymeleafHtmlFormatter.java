@@ -1,16 +1,16 @@
 package org.analogweb.thymeleaf;
 
+import static org.analogweb.thymeleaf.ThymeleafPluginModulesConfig.PLUGIN_MESSAGE_RESOURCE;
+
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.analogweb.thymeleaf.ThymeleafPluginModulesConfig.PLUGIN_MESSAGE_RESOURCE;
 import org.analogweb.DirectionFormatter;
 import org.analogweb.RequestContext;
 import org.analogweb.core.direction.Html;
 import org.analogweb.core.direction.Html.HtmlTemplate;
 import org.analogweb.exception.FormatFailureException;
-import org.analogweb.util.Assertion;
 import org.analogweb.util.logging.Log;
 import org.analogweb.util.logging.Logs;
 import org.thymeleaf.TemplateEngine;
@@ -30,10 +30,6 @@ public class ThymeleafHtmlFormatter implements DirectionFormatter {
 
     private static final Log log = Logs.getLog(ThymeleafHtmlFormatter.class);
     private TemplateEngine engine;
-
-    public ThymeleafHtmlFormatter() {
-        this.engine = initDefaultTemplateEngine();
-    }
 
     protected TemplateEngine initDefaultTemplateEngine() {
         TemplateEngine engine = new TemplateEngine();
@@ -60,7 +56,6 @@ public class ThymeleafHtmlFormatter implements DirectionFormatter {
             try {
                 TemplateEngine engine = getTemplateEngine();
                 log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000002", engine);
-                Assertion.notNull(engine, TemplateEngine.class.getName());
                 engine.process(templateSource.getTemplateResource(), context, writeTo.getResponse()
                         .getWriter());
             } catch (IOException e) {
@@ -77,6 +72,9 @@ public class ThymeleafHtmlFormatter implements DirectionFormatter {
      * @return {@link TemplateEngine}
      */
     protected TemplateEngine getTemplateEngine() {
+        if (this.engine == null) {
+            this.engine = initDefaultTemplateEngine();
+        }
         return this.engine;
     }
 

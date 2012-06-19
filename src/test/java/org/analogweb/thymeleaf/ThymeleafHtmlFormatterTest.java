@@ -1,8 +1,9 @@
 package org.analogweb.thymeleaf;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -16,13 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.analogweb.RequestContext;
 import org.analogweb.core.direction.Html.HtmlTemplate;
-import org.analogweb.exception.AssertionFailureException;
 import org.analogweb.util.Maps;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.exceptions.TemplateInputException;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
@@ -95,8 +96,9 @@ public class ThymeleafHtmlFormatterTest {
 
     @Test
     public void testformatAndWriteIntoWithEmptyTemplateEngine() throws Exception {
-        thrown.expect(AssertionFailureException.class);
+        thrown.expect(TemplateInputException.class);
 
+        // initialize TemplateEngine
         writer.setTemplateEngine(null);
 
         StringWriter responseBody = new StringWriter();
