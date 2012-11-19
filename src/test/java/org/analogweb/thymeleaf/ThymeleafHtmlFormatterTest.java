@@ -15,7 +15,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.analogweb.RequestContext;
+import org.analogweb.ServletRequestContext;
 import org.analogweb.core.direction.Html.HtmlTemplate;
 import org.analogweb.util.Maps;
 import org.junit.Before;
@@ -31,7 +31,7 @@ public class ThymeleafHtmlFormatterTest {
 
     private ThymeleafHtmlFormatter writer;
 
-    private RequestContext requestContext;
+    private ServletRequestContext requestContext;
     private HttpServletRequest request;
     private HttpServletResponse response;
     private ServletContext servletContext;
@@ -42,14 +42,14 @@ public class ThymeleafHtmlFormatterTest {
     @Before
     public void setUp() {
         writer = new ThymeleafHtmlFormatter();
-        requestContext = mock(RequestContext.class);
+        requestContext = mock(ServletRequestContext.class);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
         servletContext = mock(ServletContext.class);
 
-        when(requestContext.getRequest()).thenReturn(request);
-        when(requestContext.getResponse()).thenReturn(response);
-        when(requestContext.getContext()).thenReturn(servletContext);
+        when(requestContext.getServletRequest()).thenReturn(request);
+        when(requestContext.getServletResponse()).thenReturn(response);
+        when(requestContext.getServletContext()).thenReturn(servletContext);
 
         TemplateEngine engine = new TemplateEngine();
         TemplateResolver resolver = new ClassLoaderTemplateResolver();
@@ -62,10 +62,15 @@ public class ThymeleafHtmlFormatterTest {
 
     @Test
     public void testformatAndWriteInto() throws Exception {
+
         StringWriter responseBody = new StringWriter();
         PrintWriter pw = new PrintWriter(responseBody);
 
         when(response.getWriter()).thenReturn(pw);
+        /*
+        ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+        when(requestContext.getResponseBody()).thenReturn(out);
+        */
 
         // Thymeleaf relatives.
         when(request.getLocale()).thenReturn(Locale.getDefault());
@@ -91,7 +96,7 @@ public class ThymeleafHtmlFormatterTest {
                 + "        <div class=\"page-header\">" + "\n" + "            <h1>これはテストです.</h1>"
                 + "\n" + "        </div>" + "\n" + "    </div>" + "\n" + "</div>" + "\n"
                 + "</body>" + "\n" + "</html>";
-        assertThat(expected, is(responseBody.toString()));
+        assertThat(responseBody.toString(), is(expected));
     }
 
     @Test
