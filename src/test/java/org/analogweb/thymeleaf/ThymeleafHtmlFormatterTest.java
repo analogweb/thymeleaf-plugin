@@ -15,8 +15,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.analogweb.ServletRequestContext;
 import org.analogweb.core.direction.Html.HtmlTemplate;
+import org.analogweb.servlet.ServletRequestContext;
 import org.analogweb.util.Maps;
 import org.junit.Before;
 import org.junit.Rule;

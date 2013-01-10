@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.analogweb.DirectionFormatter;
 import org.analogweb.RequestContext;
-import org.analogweb.ServletRequestContext;
 import org.analogweb.core.direction.Html;
 import org.analogweb.core.direction.Html.HtmlTemplate;
 import org.analogweb.exception.FormatFailureException;
+import org.analogweb.servlet.ServletRequestContext;
 import org.analogweb.util.logging.Log;
 import org.analogweb.util.logging.Logs;
 import org.thymeleaf.TemplateEngine;
