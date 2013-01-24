@@ -3,14 +3,15 @@ package org.analogweb.thymeleaf;
 import static org.analogweb.thymeleaf.ThymeleafPluginModulesConfig.PLUGIN_MESSAGE_RESOURCE;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.analogweb.DirectionFormatter;
 import org.analogweb.RequestContext;
-import org.analogweb.core.direction.Html;
+import org.analogweb.ResponseContext;
+import org.analogweb.ResponseContext.ResponseEntity;
 import org.analogweb.core.direction.Html.HtmlTemplate;
 import org.analogweb.exception.FormatFailureException;
 import org.analogweb.servlet.ServletRequestContext;
@@ -50,31 +51,27 @@ public class ThymeleafHtmlFormatter implements DirectionFormatter {
     }
 
     @Override
-    public void formatAndWriteInto(RequestContext writeTo, String charset, Object source)
-            throws FormatFailureException {
+    public void formatAndWriteInto(final RequestContext context, ResponseContext writeTo,
+            String charset, Object source) throws FormatFailureException {
         if (source instanceof HtmlTemplate) {
-            HtmlTemplate templateSource = (HtmlTemplate) source;
-            IContext context = createIContext(writeTo, templateSource);
+            final HtmlTemplate templateSource = (HtmlTemplate) source;
+            final IContext iContext = createIContext(context, templateSource);
             log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000001", context);
-            try {
-                TemplateEngine engine = getTemplateEngine();
-                log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000002", engine);
-                engine.process(templateSource.getTemplateResource(), context,
-                        resolveWriter(writeTo));
-            } catch (IOException e) {
-                throw new FormatFailureException(e, source, Html.class.getName());
-            }
+            final TemplateEngine engine = getTemplateEngine();
+            log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000002", engine);
+            writeTo.getResponseWriter().writeEntity(new ResponseEntity() {
+                @Override
+                public void writeInto(OutputStream responseBody) throws IOException {
+                    OutputStreamWriter writer = new OutputStreamWriter(responseBody);
+                    engine.process(templateSource.getTemplateResource(), iContext, writer);
+                    writer.flush();
+
+                }
+            });
         } else {
             log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000001", HtmlTemplate.class.getCanonicalName());
             log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000002");
         }
-    }
-
-    protected Writer resolveWriter(RequestContext context) throws IOException {
-        if (context instanceof ServletRequestContext) {
-            return ((ServletRequestContext) context).getServletResponse().getWriter();
-        }
-        return new OutputStreamWriter(context.getResponseBody());
     }
 
     /**
@@ -96,8 +93,8 @@ public class ThymeleafHtmlFormatter implements DirectionFormatter {
      * @return {@link IContext}
      */
     protected IContext createIContext(RequestContext request, HtmlTemplate templateSource) {
-        if(request instanceof ServletRequestContext){
-            ServletRequestContext s = (ServletRequestContext)request;
+        if (request instanceof ServletRequestContext) {
+            ServletRequestContext s = (ServletRequestContext) request;
             HttpServletRequest servletRequest = s.getServletRequest();
             WebContext context = new WebContext(servletRequest, s.getServletContext(),
                     servletRequest.getLocale(), templateSource.getContext());
