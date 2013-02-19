@@ -13,7 +13,7 @@ import org.analogweb.RequestContext;
 import org.analogweb.ResponseContext;
 import org.analogweb.ResponseContext.ResponseEntity;
 import org.analogweb.core.direction.Html.HtmlTemplate;
-import org.analogweb.exception.FormatFailureException;
+import org.analogweb.core.FormatFailureException;
 import org.analogweb.servlet.ServletRequestContext;
 import org.analogweb.util.logging.Log;
 import org.analogweb.util.logging.Logs;
