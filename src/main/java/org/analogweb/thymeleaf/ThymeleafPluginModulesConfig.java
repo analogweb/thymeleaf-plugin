@@ -2,7 +2,7 @@ package org.analogweb.thymeleaf;
 
 import org.analogweb.ModulesBuilder;
 import org.analogweb.PluginModulesConfig;
-import org.analogweb.core.direction.Html;
+import org.analogweb.core.response.Html;
 import org.analogweb.util.MessageResource;
 import org.analogweb.util.PropertyResourceBundleMessageResource;
 import org.analogweb.util.logging.Log;
@@ -28,7 +28,7 @@ public class ThymeleafPluginModulesConfig implements PluginModulesConfig {
     @Override
     public ModulesBuilder prepare(ModulesBuilder builder) {
         log.log(PLUGIN_MESSAGE_RESOURCE, "ITYB000001");
-        builder.addDirectionFormatterClass(Html.class, ThymeleafHtmlFormatter.class);
+        builder.addResponseFormatterClass(Html.class, ThymeleafHtmlFormatter.class);
         return builder;
     }
 

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.analogweb.ResponseContext;
 import org.analogweb.ResponseContext.ResponseWriter;
 import org.analogweb.core.DefaultResponseWriter;
-import org.analogweb.core.direction.Html.HtmlTemplate;
+import org.analogweb.core.response.Html.HtmlTemplate;
 import org.analogweb.servlet.ServletRequestContext;
 import org.analogweb.util.Maps;
 import org.junit.Before;

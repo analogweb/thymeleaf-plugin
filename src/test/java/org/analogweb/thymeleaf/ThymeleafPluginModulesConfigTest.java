@@ -7,7 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertThat;
 
 import org.analogweb.ModulesBuilder;
-import org.analogweb.core.direction.Html;
+import org.analogweb.core.response.Html;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,13 +25,13 @@ public class ThymeleafPluginModulesConfigTest {
     @Test
     public void testPrepare() {
 
-        when(builder.addDirectionFormatterClass(Html.class, ThymeleafHtmlFormatter.class))
+        when(builder.addResponseFormatterClass(Html.class, ThymeleafHtmlFormatter.class))
                 .thenReturn(builder);
         ModulesBuilder actual = config.prepare(builder);
 
         assertThat(actual, is(builder));
 
-        verify(builder).addDirectionFormatterClass(Html.class, ThymeleafHtmlFormatter.class);
+        verify(builder).addResponseFormatterClass(Html.class, ThymeleafHtmlFormatter.class);
     }
 
 }

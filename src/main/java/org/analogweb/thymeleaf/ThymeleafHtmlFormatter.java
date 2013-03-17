@@ -8,11 +8,11 @@ import java.io.OutputStreamWriter;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.analogweb.DirectionFormatter;
+import org.analogweb.ResponseFormatter;
 import org.analogweb.RequestContext;
 import org.analogweb.ResponseContext;
 import org.analogweb.ResponseContext.ResponseEntity;
-import org.analogweb.core.direction.Html.HtmlTemplate;
+import org.analogweb.core.response.Html.HtmlTemplate;
 import org.analogweb.core.FormatFailureException;
 import org.analogweb.servlet.ServletRequestContext;
 import org.analogweb.util.logging.Log;
@@ -25,12 +25,12 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 
 /**
  * <a href="http://www.thymeleaf.org/">Thymeleaf</a>テンプレートを
- * フォーマットする{@link DirectionFormatter}の実装です。<br/>
+ * フォーマットする{@link ResponseFormatter}の実装です。<br/>
  * HTMLテンプレートを{@link TemplateEngine}及び{@link IContext}を
  * 使用して生成し、レスポンスに書き込みます。
  * @author snowgoose
  */
-public class ThymeleafHtmlFormatter implements DirectionFormatter {
+public class ThymeleafHtmlFormatter implements ResponseFormatter {
 
     private static final Log log = Logs.getLog(ThymeleafHtmlFormatter.class);
     private TemplateEngine engine;
