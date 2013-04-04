@@ -31,5 +31,4 @@ public class ThymeleafPluginModulesConfig implements PluginModulesConfig {
         builder.addResponseFormatterClass(Html.class, ThymeleafHtmlFormatter.class);
         return builder;
     }
-
 }

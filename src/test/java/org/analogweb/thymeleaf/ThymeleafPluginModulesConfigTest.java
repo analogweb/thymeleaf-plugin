@@ -24,14 +24,10 @@ public class ThymeleafPluginModulesConfigTest {
 
     @Test
     public void testPrepare() {
-
         when(builder.addResponseFormatterClass(Html.class, ThymeleafHtmlFormatter.class))
                 .thenReturn(builder);
         ModulesBuilder actual = config.prepare(builder);
-
         assertThat(actual, is(builder));
-
         verify(builder).addResponseFormatterClass(Html.class, ThymeleafHtmlFormatter.class);
     }
-
 }

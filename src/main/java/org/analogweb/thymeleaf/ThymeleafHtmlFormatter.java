@@ -6,21 +6,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.analogweb.ResponseFormatter;
 import org.analogweb.RequestContext;
 import org.analogweb.ResponseContext;
 import org.analogweb.ResponseContext.ResponseEntity;
 import org.analogweb.core.response.Html.HtmlTemplate;
 import org.analogweb.core.FormatFailureException;
-import org.analogweb.servlet.ServletRequestContext;
 import org.analogweb.util.logging.Log;
 import org.analogweb.util.logging.Logs;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 /**
@@ -42,9 +39,8 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
     }
 
     protected TemplateResolver createDefaultTemplateResolver() {
-        ServletContextTemplateResolver resolver = new ServletContextTemplateResolver();
+        TemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setCacheTTLMs(360000L);
-        resolver.setPrefix("/WEB-INF/templates/");
         resolver.setSuffix(".html");
         resolver.setCharacterEncoding("UTF-8");
         return resolver;
@@ -65,7 +61,6 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
                     OutputStreamWriter writer = new OutputStreamWriter(responseBody);
                     engine.process(templateSource.getTemplateResource(), iContext, writer);
                     writer.flush();
-
                 }
             });
         } else {
@@ -87,22 +82,15 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
 
     /**
      * {@link IContext}を生成します。<br/>
-     * {@link RequestContext}に則った{@link WebContext}が生成されます。
+     * {@link RequestContext}に則った{@link Context}が生成されます。
      * @param request {@link RequestContext}
      * @param templateSource {@link HtmlTemplate}
      * @return {@link IContext}
      */
     protected IContext createIContext(RequestContext request, HtmlTemplate templateSource) {
-        if (request instanceof ServletRequestContext) {
-            ServletRequestContext s = (ServletRequestContext) request;
-            HttpServletRequest servletRequest = s.getServletRequest();
-            WebContext context = new WebContext(servletRequest, s.getServletContext(),
-                    servletRequest.getLocale(), templateSource.getContext());
-            return context;
-        } else {
-            // TODO 
-            throw new UnsupportedOperationException();
-        }
+        Context context = new Context();
+        context.setVariables(templateSource.getContext());
+        return context;
     }
 
     /**
@@ -112,5 +100,4 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
     public void setTemplateEngine(TemplateEngine engine) {
         this.engine = engine;
     }
-
 }
