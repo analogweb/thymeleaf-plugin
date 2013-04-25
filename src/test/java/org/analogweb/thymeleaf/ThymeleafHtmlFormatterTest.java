@@ -53,8 +53,7 @@ public class ThymeleafHtmlFormatterTest {
         Map<String, Object> context = Maps.newHashMap("message", (Object) "This is TEST.");
         context.put("contextPath", "/boo");
         HtmlTemplate source = new HtmlTemplate("ThymeleafHtmlFormatterTest-1", context);
-        formatter.formatAndWriteInto(requestContext, responseContext, "UTF-8", source);
-        writer.getEntity().writeInto(out);
+        formatter.formatAndWriteInto(requestContext, responseContext, "UTF-8", source).writeInto(out);
         String expected = "<!DOCTYPE html>" + "\n\n"
                 + "<html xmlns=\"http://www.w3.org/1999/xhtml\">" + "\n" + "<head>" + "\n"
                 + "    <meta charset=\"utf-8\" />" + "\n"
@@ -78,8 +77,7 @@ public class ThymeleafHtmlFormatterTest {
         when(responseContext.getResponseWriter()).thenReturn(writer);
         Map<String, Object> context = Maps.newEmptyHashMap();
         HtmlTemplate source = new HtmlTemplate("ThymeleafHtmlFormatterTest-1", context);
-        formatter.formatAndWriteInto(requestContext, responseContext, "UTF-8", source);
-        writer.getEntity().writeInto(out);
+        formatter.formatAndWriteInto(requestContext, responseContext, "UTF-8", source).writeInto(out);
     }
 
     @Test

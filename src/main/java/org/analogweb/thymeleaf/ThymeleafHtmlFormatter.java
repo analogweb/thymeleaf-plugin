@@ -47,27 +47,38 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
     }
 
     @Override
-    public void formatAndWriteInto(final RequestContext context, ResponseContext writeTo,
-            String charset, Object source) throws FormatFailureException {
-        if (source instanceof HtmlTemplate) {
-            final HtmlTemplate templateSource = (HtmlTemplate) source;
-            final IContext iContext = createIContext(context, templateSource);
-            log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000001", context);
-            final TemplateEngine engine = getTemplateEngine();
-            log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000002", engine);
-            writeTo.getResponseWriter().writeEntity(new ResponseEntity() {
-                @Override
-                public void writeInto(OutputStream responseBody) throws IOException {
-                    OutputStreamWriter writer = new OutputStreamWriter(responseBody);
-                    engine.process(templateSource.getTemplateResource(), iContext, writer);
-                    writer.flush();
-                }
-            });
-        } else {
-            log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000001", HtmlTemplate.class.getCanonicalName());
-            log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000002");
-        }
-    }
+	public ResponseEntity formatAndWriteInto(final RequestContext context,
+			ResponseContext writeTo, String charset, Object source)
+			throws FormatFailureException {
+		if (source instanceof HtmlTemplate) {
+			final HtmlTemplate templateSource = (HtmlTemplate) source;
+			final IContext iContext = createIContext(context, templateSource);
+			log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000001", context);
+			final TemplateEngine engine = getTemplateEngine();
+			log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000002", engine);
+			return new ResponseEntity() {
+				@Override
+				public void writeInto(OutputStream responseBody)
+						throws IOException {
+					OutputStreamWriter writer = new OutputStreamWriter(
+							responseBody);
+					engine.process(templateSource.getTemplateResource(),
+							iContext, writer);
+					writer.flush();
+				}
+
+				@Override
+				public long getContentLength() {
+					return -1;
+				}
+			};
+		} else {
+			log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000001",
+					HtmlTemplate.class.getCanonicalName());
+			log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000002");
+			return null;
+		}
+	}
 
     /**
      * このインスタンスで共有される{@link TemplateEngine}を取得します。
