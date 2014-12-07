@@ -1,4 +1,4 @@
-Analog Web Framework
+Analog Web Framework Thymeleaf Plugin
 ===============================================
 
-AnalogWeb is a tiny HTTP orientied framework and it operated on Servlet 2.5+. 
+This plugin enables response server-side Thymeleaf template.
