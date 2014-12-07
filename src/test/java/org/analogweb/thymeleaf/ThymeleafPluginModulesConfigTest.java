@@ -1,10 +1,10 @@
 package org.analogweb.thymeleaf;
 
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.analogweb.ModulesBuilder;
 import org.analogweb.core.response.Html;
@@ -25,8 +25,8 @@ public class ThymeleafPluginModulesConfigTest {
     @Test
     public void testPrepare() {
         when(builder.addResponseFormatterClass(Html.class, ThymeleafHtmlFormatter.class))
-                .thenReturn(builder);
-        ModulesBuilder actual = config.prepare(builder);
+        .thenReturn(builder);
+        final ModulesBuilder actual = config.prepare(builder);
         assertThat(actual, is(builder));
         verify(builder).addResponseFormatterClass(Html.class, ThymeleafHtmlFormatter.class);
     }

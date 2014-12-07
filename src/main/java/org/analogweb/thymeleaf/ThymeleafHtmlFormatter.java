@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
-import org.analogweb.ResponseFormatter;
 import org.analogweb.RequestContext;
 import org.analogweb.ResponseContext;
 import org.analogweb.ResponseContext.ResponseEntity;
-import org.analogweb.core.response.Html.HtmlTemplate;
+import org.analogweb.ResponseFormatter;
 import org.analogweb.core.FormatFailureException;
+import org.analogweb.core.response.Html.HtmlTemplate;
 import org.analogweb.util.logging.Log;
 import org.analogweb.util.logging.Logs;
 import org.thymeleaf.TemplateEngine;
@@ -33,13 +33,13 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
     private TemplateEngine engine;
 
     protected TemplateEngine initDefaultTemplateEngine() {
-        TemplateEngine engine = new TemplateEngine();
+        final TemplateEngine engine = new TemplateEngine();
         engine.setTemplateResolver(createDefaultTemplateResolver());
         return engine;
     }
 
     protected TemplateResolver createDefaultTemplateResolver() {
-        TemplateResolver resolver = new ClassLoaderTemplateResolver();
+        final TemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setCacheTTLMs(360000L);
         resolver.setSuffix(".html");
         resolver.setCharacterEncoding("UTF-8");
@@ -47,38 +47,34 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
     }
 
     @Override
-	public ResponseEntity formatAndWriteInto(final RequestContext context,
-			ResponseContext writeTo, String charset, Object source)
-			throws FormatFailureException {
-		if (source instanceof HtmlTemplate) {
-			final HtmlTemplate templateSource = (HtmlTemplate) source;
-			final IContext iContext = createIContext(context, templateSource);
-			log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000001", context);
-			final TemplateEngine engine = getTemplateEngine();
-			log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000002", engine);
-			return new ResponseEntity() {
-				@Override
-				public void writeInto(OutputStream responseBody)
-						throws IOException {
-					OutputStreamWriter writer = new OutputStreamWriter(
-							responseBody);
-					engine.process(templateSource.getTemplateResource(),
-							iContext, writer);
-					writer.flush();
-				}
+    public ResponseEntity formatAndWriteInto(final RequestContext context, ResponseContext writeTo,
+            String charset, Object source) throws FormatFailureException {
+        if (source instanceof HtmlTemplate) {
+            final HtmlTemplate templateSource = (HtmlTemplate) source;
+            final IContext iContext = createIContext(context, templateSource);
+            log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000001", context);
+            final TemplateEngine engine = getTemplateEngine();
+            log.log(PLUGIN_MESSAGE_RESOURCE, "DTYB000002", engine);
+            return new ResponseEntity() {
 
-				@Override
-				public long getContentLength() {
-					return -1;
-				}
-			};
-		} else {
-			log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000001",
-					HtmlTemplate.class.getCanonicalName());
-			log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000002");
-			return null;
-		}
-	}
+                @Override
+                public void writeInto(OutputStream responseBody) throws IOException {
+                    final OutputStreamWriter writer = new OutputStreamWriter(responseBody);
+                    engine.process(templateSource.getTemplateResource(), iContext, writer);
+                    writer.flush();
+                }
+
+                @Override
+                public long getContentLength() {
+                    return -1;
+                }
+            };
+        } else {
+            log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000001", HtmlTemplate.class.getCanonicalName());
+            log.log(PLUGIN_MESSAGE_RESOURCE, "WTYB000002");
+            return null;
+        }
+    }
 
     /**
      * このインスタンスで共有される{@link TemplateEngine}を取得します。
@@ -99,7 +95,7 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
      * @return {@link IContext}
      */
     protected IContext createIContext(RequestContext request, HtmlTemplate templateSource) {
-        Context context = new Context();
+        final Context context = new Context();
         context.setVariables(templateSource.getContext());
         return context;
     }
