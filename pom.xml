@@ -41,8 +41,7 @@
 		<url>scm:git:git@github.com:analogweb/thymeleaf-plugin.git</url>
 		<connection>scm:git:git@github.com:analogweb/thymeleaf-plugin.git</connection>
 		<developerConnection>scm:git:git@github.com:analogweb/thymeleaf-plugin.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+    </scm>
 	<licenses>
 		<license>
 			<name>MIT license</name>
@@ -54,7 +53,7 @@
 	<parent>
 		<groupId>org.analogweb</groupId>
 		<artifactId>analogweb-parent-modules</artifactId>
-        <version>8</version>
+        <version>9</version>
 		<relativePath />
 	</parent>
 	<dependencies>
@@ -66,15 +65,19 @@
 		<dependency>
 			<groupId>org.analogweb</groupId>
 			<artifactId>analogweb-core</artifactId>
-            <version>0.9.3</version>
+            <version>0.9.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>java-hamcrest</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
+			<artifactId>mockito-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
