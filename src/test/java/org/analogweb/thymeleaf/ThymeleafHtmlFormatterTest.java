@@ -3,15 +3,12 @@ package org.analogweb.thymeleaf;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 import org.analogweb.RequestContext;
 import org.analogweb.ResponseContext;
-import org.analogweb.ResponseContext.ResponseWriter;
-import org.analogweb.core.DefaultResponseWriter;
 import org.analogweb.core.response.Html.HtmlTemplate;
 import org.analogweb.util.Maps;
 import org.junit.Before;
@@ -48,8 +45,6 @@ public class ThymeleafHtmlFormatterTest {
     @Test
     public void testformatAndWriteInto() throws Exception {
         final ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-        final ResponseWriter writer = new DefaultResponseWriter();
-        when(responseContext.getResponseWriter()).thenReturn(writer);
         final Map<String, Object> context = Maps.newHashMap("message", (Object) "This is TEST.");
         context.put("contextPath", "/boo");
         final HtmlTemplate source = new HtmlTemplate("ThymeleafHtmlFormatterTest-1", context);
@@ -74,8 +69,6 @@ public class ThymeleafHtmlFormatterTest {
         // initialize TemplateEngine
         formatter.setTemplateEngine(null);
         final ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-        final ResponseWriter writer = new DefaultResponseWriter();
-        when(responseContext.getResponseWriter()).thenReturn(writer);
         final Map<String, Object> context = Maps.newEmptyHashMap();
         final HtmlTemplate source = new HtmlTemplate("ThymeleafHtmlFormatterTest-1", context);
         formatter.formatAndWriteInto(requestContext, responseContext, "UTF-8", source).writeInto(

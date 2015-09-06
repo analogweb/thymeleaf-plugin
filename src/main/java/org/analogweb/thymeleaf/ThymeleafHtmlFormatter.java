@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
 
 import org.analogweb.RequestContext;
 import org.analogweb.ResponseContext;
-import org.analogweb.ResponseContext.ResponseEntity;
+import org.analogweb.ResponseEntity;
 import org.analogweb.ResponseFormatter;
 import org.analogweb.core.FormatFailureException;
 import org.analogweb.core.response.Html.HtmlTemplate;
