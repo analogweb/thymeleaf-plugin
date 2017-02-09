@@ -3,13 +3,9 @@ package org.analogweb.thymeleaf;
 import static org.analogweb.thymeleaf.ThymeleafPluginModulesConfig.PLUGIN_MESSAGE_RESOURCE;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
-import org.analogweb.RequestContext;
-import org.analogweb.ResponseContext;
-import org.analogweb.ResponseEntity;
-import org.analogweb.ResponseFormatter;
+import org.analogweb.*;
 import org.analogweb.core.FormatFailureException;
 import org.analogweb.core.response.Html.HtmlTemplate;
 import org.analogweb.util.logging.Log;
@@ -18,14 +14,10 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.IContext;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 /**
- * <a href="http://www.thymeleaf.org/">Thymeleaf</a>テンプレートを
- * フォーマットする{@link ResponseFormatter}の実装です。<br/>
- * HTMLテンプレートを{@link TemplateEngine}及び{@link IContext}を
- * 使用して生成し、レスポンスに書き込みます。
- * @author snowgoose
+ * @author y2k2mt
  */
 public class ThymeleafHtmlFormatter implements ResponseFormatter {
 
@@ -38,8 +30,8 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
         return engine;
     }
 
-    protected TemplateResolver createDefaultTemplateResolver() {
-        final TemplateResolver resolver = new ClassLoaderTemplateResolver();
+    protected ITemplateResolver createDefaultTemplateResolver() {
+        final ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setCacheTTLMs(360000L);
         resolver.setSuffix(".html");
         resolver.setCharacterEncoding("UTF-8");
@@ -58,8 +50,8 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
             return new ResponseEntity() {
 
                 @Override
-                public void writeInto(OutputStream responseBody) throws IOException {
-                    final OutputStreamWriter writer = new OutputStreamWriter(responseBody);
+                public void writeInto(WritableBuffer responseBody) throws IOException {
+                    final OutputStreamWriter writer = new OutputStreamWriter(responseBody.asOutputStream());
                     engine.process(templateSource.getTemplateResource(), iContext, writer);
                     writer.flush();
                 }
@@ -76,10 +68,6 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
         }
     }
 
-    /**
-     * このインスタンスで共有される{@link TemplateEngine}を取得します。
-     * @return {@link TemplateEngine}
-     */
     protected TemplateEngine getTemplateEngine() {
         if (this.engine == null) {
             this.engine = initDefaultTemplateEngine();
@@ -87,23 +75,12 @@ public class ThymeleafHtmlFormatter implements ResponseFormatter {
         return this.engine;
     }
 
-    /**
-     * {@link IContext}を生成します。<br/>
-     * {@link RequestContext}に則った{@link Context}が生成されます。
-     * @param request {@link RequestContext}
-     * @param templateSource {@link HtmlTemplate}
-     * @return {@link IContext}
-     */
     protected IContext createIContext(RequestContext request, HtmlTemplate templateSource) {
         final Context context = new Context();
         context.setVariables(templateSource.getContext());
         return context;
     }
 
-    /**
-     * 任意の{@link TemplateEngine}を設定します。
-     * @param engine {@link TemplateEngine}
-     */
     public void setTemplateEngine(TemplateEngine engine) {
         this.engine = engine;
     }

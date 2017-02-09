@@ -9,18 +9,10 @@ import org.analogweb.util.logging.Log;
 import org.analogweb.util.logging.Logs;
 
 /**
- * <a href="http://www.thymeleaf.org/">Thymeleaf</a>を
- * <a href="https://github.com/analogweb">Analog Web Framework</a>
- * に統合する{@link PluginModulesConfig}です。<br/>
- * このプラグインを使用することで、{@link Html}にThymeleafの書式で作成
- * したテンプレートを指定し、レスポンスすることが可能になります。
- * @author snowgoose
+ * @author y2k2mt
  */
 public class ThymeleafPluginModulesConfig implements PluginModulesConfig {
 
-    /**
-     * Thymeleafプラグインで使用する{@link MessageResource}です。
-     */
     public static final MessageResource PLUGIN_MESSAGE_RESOURCE = new PropertyResourceBundleMessageResource(
             "org.analogweb.thymeleaf.analog-messages");
     private static final Log log = Logs.getLog(ThymeleafPluginModulesConfig.class);
